@@ -1,8 +1,15 @@
-import { Before, BeforeAll, AfterAll, After } from "@cucumber/cucumber";
+import {
+  Before,
+  BeforeAll,
+  AfterAll,
+  After,
+  setDefaultTimeout,
+} from "@cucumber/cucumber";
 import { devices, chromium } from "playwright";
 const { expect } = require("@playwright/test");
 import { OurWorld } from "./types";
 global.expect = expect;
+setDefaultTimeout(60 * 1000);
 BeforeAll(async function () {
   // Browsers are expensive in Playwright so only create 1
   global.browser = await chromium.launch({
@@ -33,6 +40,7 @@ Before(async function () {
 // });
 
 After(async function () {
+  await page.pause();
   await global.page.close();
   await global.context.close();
 });
